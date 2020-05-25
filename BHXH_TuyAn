@@ -6,14 +6,17 @@ commit and-quit
 start shell user root
 1234Aa@
 mount_msdosfs /dev/da1s1 /mnt
-mkdir /mnt/BHXH_BacTraMy_backup
-cp /config/*.gz /mnt/BHXH_BacTraMy_backup/
-ls /mnt/BHXH_BacTraMy_backup
+mkdir /mnt/BHXH_TuyAn_backup
+cp /config/*.gz /mnt/BHXH_TuyAn_backup/
+ls /mnt/BHXH_TuyAn_backup
 cli
 request system software add /mnt/junos-srxsme-18.2R3.4.tgz no-copy best-effort-load no-validate
 exit
 umount /mnt
 #Báo thứ tự chuyển interface cho kỹ thuật tại site
+
+
+
 cli
 set chassis cluster cluster-id 1 node 1
 configure
@@ -27,11 +30,21 @@ commit and-quit
 request system reboot
 #Cắm dây Ctrl và Fab kết nối 2 node
 
+
+
+
+
 cli
 show configuration
+
+
+
+
 request system autorecovery state save
 request system snapshot slice alternate node local
 #Chuyển dây Viettel về lại node 1
+
+
 
 #THIẾT BỊ MỚI
 mount_msdosfs /dev/da1s1 /mnt
@@ -51,7 +64,7 @@ request system software add /mnt/junos-srxsme-18.2R3.4.tgz no-copy reboot best-e
 mount_msdosfs /dev/da1s1 /mnt
 cli
 configure
-load merge /mnt/BHXH_BacTraMy/juniper.conf.gz
+load merge /mnt/BHXH_TuyAn/juniper.conf.gz
 edit interfaces ge-0/0/1
 delete
 yes
@@ -87,11 +100,11 @@ commit
 #Cấu hình mẫu của từng huyện.
 load set terminal
 set interfaces irb unit 3 description WAN_NT_VIETTEL
-set interfaces irb unit 3 family inet address 172.17.49.15/24
+set interfaces irb unit 3 family inet address 172.17.54.5/24
 set interfaces irb unit 4 description WAN_NT_VNPT
-set interfaces irb unit 4 family inet address 172.18.49.15/24
+set interfaces irb unit 4 family inet address 172.18.54.5/24
 set interfaces irb unit 5 description Connect_to_WIFI
-set interfaces irb unit 5 family inet address 10.49.114.1/24
+set interfaces irb unit 5 family inet address 10.54.104.1/24
 set vlans WAN_NT_VIETTEL vlan-id 3
 set vlans WAN_NT_VIETTEL l3-interface irb.3
 set vlans WAN_NT_VNPT vlan-id 4
@@ -101,16 +114,16 @@ set vlans CONNECT_TO_WIFI l3-interface irb.5
 set interfaces ge-0/0/0 unit 0 encapsulation ppp-over-ether
 set interfaces ge-0/0/3 unit 0 family ethernet-switching vlan members LAN
 set interfaces ge-0/0/4 unit 0 family ethernet-switching vlan members LAN
-set interfaces ge-0/0/5 description Connect_to_WIFI_Huyen_BacTraMy
+set interfaces ge-0/0/5 description Connect_to_WIFI_Huyen_TuyAn
 set interfaces ge-0/0/5 unit 0 family ethernet-switching vlan members CONNECT_TO_WIFI
 set interfaces ge-0/0/6 unit 0 family ethernet-switching vlan members LAN
-set interfaces ge-0/0/7 description Connect_to_VideoConference_Huyen_BacTraMy
+set interfaces ge-0/0/7 description Connect_to_VideoConference_Huyen_TuyAn
 set interfaces ge-0/0/7 unit 0 family ethernet-switching vlan members LAN
 set interfaces ge-0/0/8 unit 0 description INTERNET
 set interfaces ge-0/0/8 unit 0 encapsulation ppp-over-ether
-set interfaces ge-0/0/9 description WAN_NT_Huyen_BacTraMy_Viettel
+set interfaces ge-0/0/9 description WAN_NT_Huyen_TuyAn_Viettel
 set interfaces ge-0/0/9 unit 0 family ethernet-switching vlan members WAN_NT_VIETTEL
-set interfaces ge-0/0/10 description WAN_NT_VNPT_Huyen_BacTraMy
+set interfaces ge-0/0/10 description WAN_NT_VNPT_Huyen_TuyAn
 set interfaces ge-0/0/10 unit 0 family ethernet-switching vlan members WAN_NT_VNPT
 set interfaces ge-5/0/3 unit 0 family ethernet-switching vlan members LAN
 set interfaces ge-5/0/4 unit 0 family ethernet-switching vlan members LAN
@@ -119,9 +132,9 @@ set interfaces ge-5/0/5 unit 0 family ethernet-switching vlan members CONNECT_TO
 set interfaces ge-5/0/7 unit 0 family ethernet-switching vlan members LAN
 set interfaces ge-5/0/8 unit 0 description INTERNET
 set interfaces ge-5/0/8 unit 0 encapsulation ppp-over-ether
-set interfaces ge-5/0/9 description WAN_NT_Huyen_BacTraMy_Viettel
+set interfaces ge-5/0/9 description WAN_NT_Huyen_TuyAn_Viettel
 set interfaces ge-5/0/9 unit 0 family ethernet-switching vlan members WAN_NT_VIETTEL
-set interfaces ge-5/0/10 description WAN_NT_VNPT_Huyen_BacTraMy
+set interfaces ge-5/0/10 description WAN_NT_VNPT_Huyen_TuyAn
 set interfaces ge-5/0/10 unit 0 family ethernet-switching vlan members WAN_NT_VNPT
 set security zones security-zone WAN interfaces irb.3
 set security zones security-zone WAN interfaces irb.4
@@ -143,6 +156,19 @@ request system reboot
 #Chuyển dây từ thiết bị cũ lên thiết bị mới
 
 #Kiểm tra các kết nối: INTERNET, LAN, WAN VNPT, WAN VIETTEL, WIFI
+
+
+
+
+
+
+
+
+
+
+
+
+
 request system license add terminal
 request system autorecovery state save
 request system snapshot slice alternate node local
@@ -153,10 +179,12 @@ configure
 commit
 request system reboot node 1
 show chassis cluster status | refresh 5
+ 
+
+
 request system configuration rescue save
 
 mount_msdosfs /devda1s1 /mnt
-mkdir /mnt/BHXH_BacTraMy_new
-cp /config/*.gz /mnt/BHXH_BacTraMy_new/
+mkdir /mnt/BHXH_TuyAn_new
+cp /config/*.gz /mnt/BHXH_TuyAn_new/
 umount /mnt
-
