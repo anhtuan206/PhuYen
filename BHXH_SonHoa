@@ -7,81 +7,13 @@ exit
 root
 1234Aa@
 mount_msdosfs /dev/da1s1 /mnt
-mkdir /mnt/BHXH_SongHinh_backup
-cp /config/*.gz /mnt/BHXH_SongHinh_backup/
-ls /mnt/BHXH_SongHinh_backup
+mkdir /mnt/BHXH_SonHoa_backup
+cp /config/*.gz /mnt/BHXH_SonHoa_backup/
+ls /mnt/BHXH_SonHoa_backup
 cli
 request system software add /mnt/junos-srxsme-18.2R3.4.tgz no-copy best-effort-load no-validate
 exit
 umount /mnt
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ##Báo thứ tự chuyển interface cho kỹ thuật tại site
@@ -115,6 +47,8 @@ show configuration
 request system autorecovery state save
 request system snapshot slice alternate node local
 Chuyển dây Viettel về lại node 1
+
+
 #THIẾT BỊ MỚI
 mount_msdosfs /dev/da1s1 /mnt
 cli
@@ -134,7 +68,7 @@ request system software add /mnt/junos-srxsme-18.2R3.4.tgz no-copy reboot best-e
 mount_msdosfs /dev/da1s1 /mnt
 cli
 configure
-load merge /mnt/BHXH_SongHinh/juniper.conf.gz
+load merge /mnt/BHXH_SonHoa/juniper.conf.gz
 delete interfaces ge-0/0/3
 set interfaces ge-0/0/3 description "Internet IaGrai"
 set interfaces ge-0/0/3 unit 0 encapsulation ppp-over-ether
@@ -182,8 +116,8 @@ set interfaces ge-3/0/6 unit 0 family ethernet-switching vlan members WAN_NT_VIE
 set interfaces ge-3/0/7 description WAN_NT_VNPT_Huyen_SonHoa
 set interfaces ge-3/0/7 unit 0 family ethernet-switching vlan members WAN_NT_VNPT
 set system services dhcp-local-server group BHXH-WIFI interface irb.5
-set groups node0 system host-name BHXH_SongHinh
-set groups node1 system host-name BHXH_SongHinh
+set groups node0 system host-name BHXH_SonHoa
+set groups node1 system host-name BHXH_SonHoa
 set groups node0 interfaces fxp0 unit 0 family inet address 192.168.100.1/24
 set groups node1 interfaces fxp0 unit 0 family inet address 192.168.100.2/24
 set apply-groups ${node}
@@ -224,6 +158,6 @@ request system configuration rescue save
 
 
 mount_msdosfs /dev/da1s1 /mnt
-mkdir /mnt/BHXH_SongHinh_new
-cp /config/*.gz /mnt/BHXH_SongHinh_new
+mkdir /mnt/BHXH_SonHoa_new
+cp /config/*.gz /mnt/BHXH_SonHoa_new
 umount /mnt
